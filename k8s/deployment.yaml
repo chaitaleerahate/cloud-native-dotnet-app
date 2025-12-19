@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: cloudnative-deployment
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: cloudnative
+
+  template:
+    metadata:
+      labels:
+        app: cloudnative
+
+    spec:
+      containers:
+      - name: cloudnative-container
+        image: cloudnativeapp:1.0
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: MESSAGE
+          valueFrom:
+                configMapKeyRef: #tells kbernetes: get MESSAGE from ConfigMap named app-config
+                  name: app-config
+                  key: MESSAGE
