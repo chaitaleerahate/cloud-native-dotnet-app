@@ -1,0 +1,30 @@
+# .NET build outputs
+bin/
+obj/
+*.dll
+*.exe
+*.pdb
+*.deps.json
+*.runtimeconfig.json
+*.vshost.*
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Docker files (ignore images and logs)
+docker-compose*.yml
+Dockerfile.*
+
+# Kubernetes local configs
+*.local.*.yaml
+
+# NPM / Node modules (if any later)
+node_modules/
+
+# OS temporary files
+*.tmp
+*.log
+Thumbs.db
+.DS_Store
