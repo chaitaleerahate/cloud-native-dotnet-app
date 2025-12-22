@@ -20,7 +20,7 @@ spec:
       containers:
       - name: cloudnative-container
         image: cloudnativeapp:1.0
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
 
         ports:
         - containerPort: 8080
