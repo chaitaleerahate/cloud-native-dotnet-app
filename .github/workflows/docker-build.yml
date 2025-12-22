@@ -1,4 +1,4 @@
-name: CI - Build & Push Docker Image
+name: CI-CD Pipeline
 
 on:
   push:
@@ -18,10 +18,35 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build Docker image
+      - name: Build & Push Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/cloudnativeapp:latest ./CloudNativeApp
+          docker build -t chaitaleerahate/cloudnativeapp:${{ github.sha }} CloudNativeApp
+          docker push chaitaleerahate/cloudnativeapp:${{ github.sha }}
 
-      - name: Push Docker image
+  deploy-dev:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: v1.29.0
+
+      - name: Setup Helm
+        uses: azure/setup-helm@v4
+
+      - name: Configure kubeconfig
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/cloudnativeapp:latest
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+
+      - name: Deploy to DEV
+        run: |
+          helm upgrade --install cloudnative-dev cloudnative-chart \
+            -f cloudnative-chart/values.yaml \
+            -f cloudnative-chart/values-dev.yaml \
+            --set image.tag=${{ github.sha }}
