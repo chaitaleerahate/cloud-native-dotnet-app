@@ -2,7 +2,8 @@ replicaCount: 2
 
 image:
   repository: chaitaleerahate/cloudnativeapp
-  tag: "{{ .Values.image.tag }}"
+  tag: a7f05c381efedf61dd2a065821ac62d11e212642
+  pullPolicy: IfNotPresent
 
 ingress:
   host: dev.app.local
