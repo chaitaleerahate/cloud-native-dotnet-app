@@ -1,0 +1,7 @@
+replicaCount: 2
+
+image:
+  tag: stage
+
+ingress:
+  host: stage.app.local

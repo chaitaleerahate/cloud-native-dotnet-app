@@ -1,0 +1,8 @@
+replicaCount: 2
+
+image:
+  repository: chaitaleerahate/cloudnativeapp
+  tag: "{{ .Values.image.tag }}"
+
+ingress:
+  host: dev.app.local

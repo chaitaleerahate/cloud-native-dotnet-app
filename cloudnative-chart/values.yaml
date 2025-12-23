@@ -1,0 +1,21 @@
+replicaCount: 1
+
+image:
+  repository: chaitaleerahate/cloudnativeapp
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: true
+  className: nginx
+  host: app.local
+  paths:
+    - path: /
+      pathType: Prefix
+
+resources: {}

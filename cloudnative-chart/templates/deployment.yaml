@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.namespace }}
+  name: {{ include "cloudnative.fullname" . }}
+  labels:
+    app: cloudnative
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "cloudnative.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "cloudnative.fullname" . }}
+    spec:
+      containers:
+        - name: cloudnative
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}

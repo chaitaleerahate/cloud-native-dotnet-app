@@ -1,0 +1,7 @@
+replicaCount: 3
+
+image:
+  tag: latest
+
+ingress:
+  host: app.local
