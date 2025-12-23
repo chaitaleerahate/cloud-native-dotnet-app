@@ -1,5 +1,7 @@
-
 {{- define "cloudnative.fullname" -}}
-{{ .Release.Name }}-{{ .Chart.Name }}
+{{- if .Release.Name }}
+{{ .Release.Name }}
+{{- else }}
+{{ .Chart.Name }}
 {{- end }}
-
+{{- end -}}
