@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -23,30 +22,22 @@ jobs:
           docker build -t chaitaleerahate/cloudnativeapp:${{ github.sha }} CloudNativeApp
           docker push chaitaleerahate/cloudnativeapp:${{ github.sha }}
 
-  deploy-dev:
+  helm-validate:
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup kubectl
-        uses: azure/setup-kubectl@v4
-        with:
-          version: v1.29.0
+      - uses: actions/checkout@v4
 
       - name: Setup Helm
         uses: azure/setup-helm@v4
 
-      - name: Configure kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+      - name: Helm Lint
+        run: helm lint cloudnative-chart
 
-      - name: Deploy to DEV
+      - name: Helm Template
         run: |
-          helm upgrade --install cloudnative-dev cloudnative-chart \
+          helm template cloudnative-dev cloudnative-chart \
             -f cloudnative-chart/values.yaml \
             -f cloudnative-chart/values-dev.yaml \
             --set image.tag=${{ github.sha }}
