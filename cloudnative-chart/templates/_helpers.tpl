@@ -1,15 +1,19 @@
 {{/*
 Return the fully qualified app name
-Works in Helm CLI, Helm lint, and Argo CD
+Safe for helm lint, template, and Argo CD
 */}}
 {{- define "cloudnative.fullname" -}}
 {{- if .Release }}
-{{- if .Release.Name }}
-{{ .Release.Name }}
+  {{- if .Release.Name }}
+    {{ .Release.Name }}
+  {{- else if .Chart }}
+    {{ .Chart.Name | default "chart-name" }}
+  {{- else }}
+    chart-name
+  {{- end }}
+{{- else if .Chart }}
+  {{ .Chart.Name | default "chart-name" }}
 {{- else }}
-{{ .Chart.Name }}
-{{- end }}
-{{- else }}
-{{ .Chart.Name }}
+  chart-name
 {{- end }}
 {{- end }}
